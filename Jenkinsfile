@@ -25,9 +25,9 @@ pipeline {
 
         stage('Build & Push'){
             steps {
-                sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/anime-hub:$BUILD_ID .'
-                sh 'docker push $DOCKERHUB_CREDENTIALS_USR/anime-hub:$BUILD_ID'
-                sh 'docker rmi $DOCKERHUB_CREDENTIALS_USR/anime-hub:$BUILD_ID'
+                sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/np:$BUILD_ID .'
+                sh 'docker push $DOCKERHUB_CREDENTIALS_USR/np:$BUILD_ID'
+                sh 'docker rmi $DOCKERHUB_CREDENTIALS_USR/np:$BUILD_ID'
 
             }
         }
