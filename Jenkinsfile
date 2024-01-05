@@ -1,55 +1,38 @@
 pipeline {
-    agent none
+    agent any
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dh_cred')
     }
+
     stages {
         stage('Checkout'){
-            agent any
             steps{
                 checkout scm
             }
         }
 
+        stage('test'){
+              steps {
+                  sh 'docker ps'
+              }
+          }
+
         stage('Init'){
-            agent any
             steps {
                 sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
         }
 
-        stage('Build Backend'){
-            agent any
-           when {
-              changeset "**/backend/*.*"
-            beforeAgent true
-           }
+        stage('Build & Push'){
             steps {
-                dir('backend'){
-                    sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/ecommerce_backend:$BUILD_ID .'
-                    sh 'docker push $DOCKERHUB_CREDENTIALS_USR/ecommerce_backend:$BUILD_ID'
-                    sh 'docker rmi $DOCKERHUB_CREDENTIALS_USR/ecommerce_backend:$BUILD_ID'
-                }
-            }
-        }
+                sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/anime-hub:$BUILD_ID .'
+                sh 'docker push $DOCKERHUB_CREDENTIALS_USR/anime-hub:$BUILD_ID'
+                sh 'docker rmi $DOCKERHUB_CREDENTIALS_USR/anime-hub:$BUILD_ID'
 
-        stage('Build Frontend'){
-            agent any
-            when {
-               changeset "**/frontend/*.*"
-             beforeAgent true
-            }
-            steps {
-                dir('backend'){
-                    sh 'docker build -t $DOCKERHUB_CREDENTIALS_USR/ecommerce_frontend:$BUILD_ID .'
-                    sh 'docker push $DOCKERHUB_CREDENTIALS_USR/ecommerce_frontend:$BUILD_ID'
-                    sh 'docker rmi $DOCKERHUB_CREDENTIALS_USR/ecommerce_frontend:$BUILD_ID'
-                }
             }
         }
 
         stage('logout'){
-            agent any
             steps {
                 sh 'docker logout'
             }
