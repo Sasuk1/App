@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: app-deploy
+  template:
+    metadata:
+      labels:
+        app: app-deploy
+    spec:
+      containers:
+      - name: app-container
+        image: sasuk1/np:5
+        ports:
+        - containerPort: 80
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  selector:
+    app: app-deploy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
