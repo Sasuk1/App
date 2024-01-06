@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: new-app
+  labels:
+    app: new-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: new-app
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: new-app
+    spec:
+      containers:
+      - name: application
+        image: sasuk1/np:5
+        ports:
+        - containerPort: 80
