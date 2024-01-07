@@ -18,9 +18,13 @@ spec:
     metadata:
       labels:
         app: new-app
+        annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9101"
+
     spec:
       containers:
       - name: application
-        image: sasuk1/np:5
+        image: sasuk1/np:latest
         ports:
         - containerPort: 80

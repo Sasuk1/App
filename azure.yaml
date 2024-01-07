@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: app-container
-        image: sasuk1/np:5
+        image: sasuk1/np:latest
         ports:
         - containerPort: 80
   strategy: 
